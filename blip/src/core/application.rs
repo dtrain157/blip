@@ -1,7 +1,9 @@
+use crate::blip_info;
+
 pub trait Application {
-    fn createApplication() -> Box<Self>;
+    fn create_application() -> Box<Self>;
 
     fn run(&self) {
-        while (true) {}
+        blip_info!("BLIP application started!");
     }
 }
