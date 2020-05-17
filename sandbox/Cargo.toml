@@ -8,5 +8,4 @@ edition = "2018"
 
 [dependencies]
 blip = { path = "../blip" }
-log = "0.4"
-env_logger = "0.7.1"
+

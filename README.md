@@ -1,2 +1,3 @@
 # blip
-Game Engine in Rust
+
+Game Engine built in Rust

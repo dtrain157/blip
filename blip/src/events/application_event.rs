@@ -3,17 +3,14 @@ use std::fmt;
 
 /***********************************************************/
 
+#[derive(Default)]
 pub struct WindowResizeEvent {
-    width: u16,
-    height: u16,
-    handled: bool,
+    pub width: u32,
+    pub height: u32,
+    pub is_handled: bool,
 }
 
 impl Event for WindowResizeEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::WindowResize
     }
@@ -36,10 +33,6 @@ pub struct WindowCloseEvent {
 }
 
 impl Event for WindowCloseEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::WindowClose
     }
@@ -62,10 +55,6 @@ pub struct AppTickEvent {
 }
 
 impl Event for AppTickEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::AppTick
     }
@@ -88,10 +77,6 @@ pub struct AppUpdateEvent {
 }
 
 impl Event for AppUpdateEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::AppUpdate
     }
@@ -114,10 +99,6 @@ pub struct AppRenderEvent {
 }
 
 impl Event for AppRenderEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::AppRender
     }

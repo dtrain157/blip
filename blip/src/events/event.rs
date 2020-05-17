@@ -1,4 +1,5 @@
 use bitflags::bitflags;
+use std::fmt;
 
 pub enum EventType {
     None,
@@ -38,8 +39,7 @@ bitflags! {
     }
 }
 
-pub trait Event {
-    fn is_handled(&self) -> bool;
+pub trait Event: fmt::Display {
     fn get_event_type(&self) -> EventType;
     fn get_category_flags(&self) -> EventCategory;
     #[inline]

@@ -4,16 +4,12 @@ use std::fmt;
 /***********************************************************/
 
 pub struct KeyPressedEvent {
-    handled: bool,
-    keycode: u32,
-    repeat_count: u32,
+    pub handled: bool,
+    pub keycode: u32,
+    pub repeat_count: u32,
 }
 
 impl Event for KeyPressedEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::KeyPressed
     }
@@ -32,15 +28,11 @@ impl fmt::Display for KeyPressedEvent {
 /***********************************************************/
 
 pub struct KeyReleasedEvent {
-    handled: bool,
-    keycode: u32,
+    pub handled: bool,
+    pub keycode: u32,
 }
 
 impl Event for KeyReleasedEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::KeyReleased
     }
@@ -59,15 +51,11 @@ impl fmt::Display for KeyReleasedEvent {
 /***********************************************************/
 
 pub struct KeyTypedEvent {
-    handled: bool,
-    keycode: u32,
+    pub handled: bool,
+    pub keycode: u32,
 }
 
 impl Event for KeyTypedEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::KeyTyped
     }

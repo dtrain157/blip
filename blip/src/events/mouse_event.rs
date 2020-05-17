@@ -4,16 +4,12 @@ use std::fmt;
 /***********************************************************/
 
 pub struct MouseMovedEvent {
-    handled: bool,
-    mouse_x: f32,
-    mouse_y: f32,
+    pub handled: bool,
+    pub mouse_x: f32,
+    pub mouse_y: f32,
 }
 
 impl Event for MouseMovedEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::MouseMoved
     }
@@ -32,16 +28,12 @@ impl fmt::Display for MouseMovedEvent {
 /***********************************************************/
 
 pub struct MouseScrolledEvent {
-    handled: bool,
-    mouse_x_offset: f32,
-    mouse_y_offset: f32,
+    pub handled: bool,
+    pub mouse_x_offset: f32,
+    pub mouse_y_offset: f32,
 }
 
 impl Event for MouseScrolledEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::MouseScrolled
     }
@@ -60,15 +52,11 @@ impl fmt::Display for MouseScrolledEvent {
 /***********************************************************/
 
 pub struct MouseButtonPressedEvent {
-    handled: bool,
-    mouse_button: u8,
+    pub handled: bool,
+    pub mouse_button: u8,
 }
 
 impl Event for MouseButtonPressedEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::MouseButtonPressed
     }
@@ -87,15 +75,11 @@ impl fmt::Display for MouseButtonPressedEvent {
 /***********************************************************/
 
 pub struct MouseButtonReleasedEvent {
-    handled: bool,
-    mouse_button: u8,
+    pub handled: bool,
+    pub mouse_button: u8,
 }
 
 impl Event for MouseButtonReleasedEvent {
-    fn is_handled(&self) -> bool {
-        self.handled
-    }
-
     fn get_event_type(&self) -> EventType {
         EventType::MouseButtonReleased
     }

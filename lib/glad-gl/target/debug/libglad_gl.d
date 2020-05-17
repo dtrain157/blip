@@ -1,0 +1,1 @@
+C:\Users\Derrick\OneDrive\PERM\CodeBase\Rust\playground\glad-gl\target\debug\libglad_gl.rlib: C:\Users\Derrick\OneDrive\PERM\CodeBase\Rust\playground\glad-gl\src\gl.rs C:\Users\Derrick\OneDrive\PERM\CodeBase\Rust\playground\glad-gl\src\lib.rs
