@@ -4,9 +4,9 @@ use std::fmt;
 /***********************************************************/
 
 pub struct MouseMovedEvent {
-    pub handled: bool,
-    pub mouse_x: f32,
-    pub mouse_y: f32,
+    pub is_handled: bool,
+    pub mouse_x: f64,
+    pub mouse_y: f64,
 }
 
 impl Event for MouseMovedEvent {
@@ -28,9 +28,9 @@ impl fmt::Display for MouseMovedEvent {
 /***********************************************************/
 
 pub struct MouseScrolledEvent {
-    pub handled: bool,
-    pub mouse_x_offset: f32,
-    pub mouse_y_offset: f32,
+    pub is_handled: bool,
+    pub mouse_x_offset: f64,
+    pub mouse_y_offset: f64,
 }
 
 impl Event for MouseScrolledEvent {
@@ -52,7 +52,7 @@ impl fmt::Display for MouseScrolledEvent {
 /***********************************************************/
 
 pub struct MouseButtonPressedEvent {
-    pub handled: bool,
+    pub is_handled: bool,
     pub mouse_button: u8,
 }
 
@@ -75,7 +75,7 @@ impl fmt::Display for MouseButtonPressedEvent {
 /***********************************************************/
 
 pub struct MouseButtonReleasedEvent {
-    pub handled: bool,
+    pub is_handled: bool,
     pub mouse_button: u8,
 }
 

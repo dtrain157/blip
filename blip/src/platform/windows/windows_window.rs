@@ -47,7 +47,7 @@ impl WindowsWindow {
         }
     }
 
-    fn handle_window_event(&self, old_window_data: &WindowData, (time, event): (f64, glfw::WindowEvent)) -> WindowData {
+    fn handle_window_event(&self, old_window_data: &WindowData, (_time, event): (f64, glfw::WindowEvent)) -> WindowData {
         match event {
             //glfw::WindowEvent::Pos(x, y) => window.set_title(&format!("Time: {:?}, Window pos: ({:?}, {:?})", time, x, y)),
             glfw::WindowEvent::Size(w, h) => match self.event_callback {
@@ -55,7 +55,7 @@ impl WindowsWindow {
                     f(&WindowResizeEvent {
                         width: w as u32,
                         height: h as u32,
-                        ..Default::default()
+                        is_handled: false,
                     });
                     WindowData {
                         width: w as u32,
@@ -72,8 +72,25 @@ impl WindowsWindow {
                     }
                 }
             },
-            /*glfw::WindowEvent::Close => println!("Time: {:?}, Window close requested.", time),
-            glfw::WindowEvent::Refresh => println!("Time: {:?}, Window refresh callback triggered.", time),
+            glfw::WindowEvent::Close => match self.event_callback {
+                Some(f) => {
+                    f(&WindowCloseEvent { is_handled: false });
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+                None => {
+                    blip_warn!("WindowCloseEvent triggered, but there is no callback to handle it!");
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+            },
+            /*glfw::WindowEvent::Refresh => println!("Time: {:?}, Window refresh callback triggered.", time),
             glfw::WindowEvent::Focus(true) => println!("Time: {:?}, Window focus gained.", time),
             glfw::WindowEvent::Focus(false) => println!("Time: {:?}, Window focus lost.", time),
             glfw::WindowEvent::Iconify(true) => println!("Time: {:?}, Window was minimised", time),
@@ -82,37 +99,115 @@ impl WindowsWindow {
             glfw::WindowEvent::Char(character) => println!("Time: {:?}, Character: {:?}", time, character),
             glfw::WindowEvent::CharModifiers(character, mods) => {
                 println!("Time: {:?}, Character: {:?}, Modifiers: [{:?}]", time, character, mods)
-            }
-            glfw::WindowEvent::MouseButton(btn, action, mods) => println!(
-                "Time: {:?}, Button: {:?}, Action: {:?}, Modifiers: [{:?}]",
-                time,
-                glfw::DebugAliases(btn),
-                action,
-                mods
-            ),
-            glfw::WindowEvent::CursorPos(xpos, ypos) => {
-                window.set_title(&format!("Time: {:?}, Cursor position: ({:?}, {:?})", time, xpos, ypos))
-            }
-            glfw::WindowEvent::CursorEnter(true) => println!("Time: {:?}, Cursor entered window.", time),
-            glfw::WindowEvent::CursorEnter(false) => println!("Time: {:?}, Cursor left window.", time),
-            glfw::WindowEvent::Scroll(x, y) => window.set_title(&format!("Time: {:?}, Scroll offset: ({:?}, {:?})", time, x, y)),
-            glfw::WindowEvent::Key(key, scancode, action, mods) => {
-                println!(
-                    "Time: {:?}, Key: {:?}, ScanCode: {:?}, Action: {:?}, Modifiers: [{:?}]",
-                    time, key, scancode, action, mods
-                );
-                match (key, action) {
-                    (Key::Escape, Action::Press) => window.set_should_close(true),
-                    (Key::R, Action::Press) => {
-                        // Resize should cause the window to "refresh"
-                        let (window_width, window_height) = window.get_size();
-                        window.set_size(window_width + 1, window_height);
-                        window.set_size(window_width, window_height);
+            }*/
+            glfw::WindowEvent::MouseButton(btn, action, _mods) => match self.event_callback {
+                Some(f) => {
+                    match action {
+                        Action::Press => f(&MouseButtonPressedEvent {
+                            is_handled: false,
+                            mouse_button: btn as u8,
+                        }),
+                        Action::Release => f(&MouseButtonReleasedEvent {
+                            is_handled: false,
+                            mouse_button: btn as u8,
+                        }),
+                        _ => {}
                     }
-                    _ => {}
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
                 }
-            }
-            glfw::WindowEvent::FileDrop(paths) => println!("Time: {:?}, Files dropped: {:?}", time, paths),
+                None => {
+                    blip_warn!("WindowResizeEvent triggered, but there is no callback to handle it!");
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+            },
+            glfw::WindowEvent::CursorPos(xpos, ypos) => match self.event_callback {
+                Some(f) => {
+                    f(&MouseMovedEvent {
+                        is_handled: false,
+                        mouse_x: xpos,
+                        mouse_y: ypos,
+                    });
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+                None => {
+                    blip_warn!("WindowCloseEvent triggered, but there is no callback to handle it!");
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+            },
+            /*glfw::WindowEvent::CursorEnter(true) => println!("Time: {:?}, Cursor entered window.", time),
+            glfw::WindowEvent::CursorEnter(false) => println!("Time: {:?}, Cursor left window.", time),*/
+            glfw::WindowEvent::Scroll(x, y) => match self.event_callback {
+                Some(f) => {
+                    f(&MouseScrolledEvent {
+                        is_handled: false,
+                        mouse_x_offset: x,
+                        mouse_y_offset: y,
+                    });
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+                None => {
+                    blip_warn!("MouseScrolledEvent triggered, but there is no callback to handle it!");
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+            },
+            glfw::WindowEvent::Key(key, _scancode, action, _mods) => match self.event_callback {
+                Some(f) => {
+                    match action {
+                        Action::Press => f(&KeyPressedEvent {
+                            is_handled: false,
+                            keycode: key as u32,
+                            repeat_count: 0,
+                        }),
+                        Action::Release => f(&KeyReleasedEvent {
+                            is_handled: false,
+                            keycode: key as u32,
+                        }),
+                        Action::Repeat => f(&KeyPressedEvent {
+                            is_handled: false,
+                            keycode: key as u32,
+                            repeat_count: 1,
+                        }),
+                    }
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+                None => {
+                    blip_warn!("WindowResizeEvent triggered, but there is no callback to handle it!");
+                    WindowData {
+                        width: old_window_data.width,
+                        height: old_window_data.height,
+                        is_vsync_enabled: old_window_data.is_vsync_enabled,
+                    }
+                }
+            },
+            /*glfw::WindowEvent::FileDrop(paths) => println!("Time: {:?}, Files dropped: {:?}", time, paths),
             glfw::WindowEvent::Maximize(maximized) => println!("Time: {:?}, Window maximized: {:?}.", time, maximized),
             glfw::WindowEvent::ContentScale(xscale, yscale) => {
                 println!("Time: {:?}, Content scale x: {:?}, Content scale y: {:?}", time, xscale, yscale)

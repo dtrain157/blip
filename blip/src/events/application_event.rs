@@ -29,7 +29,7 @@ impl fmt::Display for WindowResizeEvent {
 /***********************************************************/
 
 pub struct WindowCloseEvent {
-    handled: bool,
+    pub is_handled: bool,
 }
 
 impl Event for WindowCloseEvent {
@@ -51,7 +51,7 @@ impl fmt::Display for WindowCloseEvent {
 /***********************************************************/
 
 pub struct AppTickEvent {
-    handled: bool,
+    is_handled: bool,
 }
 
 impl Event for AppTickEvent {
@@ -73,7 +73,7 @@ impl fmt::Display for AppTickEvent {
 /***********************************************************/
 
 pub struct AppUpdateEvent {
-    handled: bool,
+    is_handled: bool,
 }
 
 impl Event for AppUpdateEvent {
@@ -95,7 +95,7 @@ impl fmt::Display for AppUpdateEvent {
 /***********************************************************/
 
 pub struct AppRenderEvent {
-    handled: bool,
+    is_handled: bool,
 }
 
 impl Event for AppRenderEvent {
